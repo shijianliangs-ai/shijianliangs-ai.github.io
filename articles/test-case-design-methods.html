@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试用例设计方法：从理论到实践 - 壹零壹玖</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="article-common.css">
+    <style>
+        /* 特定于测试用例设计文章的样式 */
+        .image-placeholder {
+            width: 100%;
+            max-width: 800px;
+            min-height: 300px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 0 auto;
+        }
+
+        .image-placeholder:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .testing-design-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+
+        .testing-design-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            border-radius: 12px;
+        }
+
+        .testing-methods-bg {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            position: relative;
+        }
+
+        .testing-methods-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.2)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            border-radius: 12px;
+        }
+
+        .testing-practice-bg {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            position: relative;
+        }
+
+        .testing-practice-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="lines" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 0 10 L 20 10" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23lines)"/></svg>');
+            border-radius: 12px;
+        }
+
+        .method-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .method-card h4 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .method-card ul {
+            margin-bottom: 1rem;
+        }
+
+        .method-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .example-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .example-box h4 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+        }
+
+        .example-box pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <i class="fas fa-bug"></i>
+                    <span>壹零壹玖</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="../index.html#home" class="nav-link">首页</a></li>
+                    <li><a href="../index.html#articles" class="nav-link">文章</a></li>
+                    <li><a href="../index.html#about" class="nav-link">关于</a></li>
+                    <li><a href="../index.html#contact" class="nav-link">联系</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 文章内容 -->
+        <section class="article-page">
+            <div class="container">
+                <div class="article-layout">
+                    <!-- 左侧目录 -->
+                    <aside class="article-toc">
+                        <div class="toc-header">
+                            <h3>目录</h3>
+                        </div>
+                        <nav class="toc-nav">
+                            <ul>
+                                <li><a href="#introduction">测试用例设计概述</a></li>
+                                <li><a href="#principles">测试用例设计原则</a></li>
+                                <li><a href="#methods">经典测试用例设计方法</a></li>
+                                <li><a href="#boundary">边界值分析法</a></li>
+                                <li><a href="#equivalence">等价类划分法</a></li>
+                                <li><a href="#decision">决策表法</a></li>
+                                <li><a href="#state">状态转换法</a></li>
+                                <li><a href="#scenario">场景法</a></li>
+                                <li><a href="#practical">实践应用与最佳实践</a></li>
+                                <li><a href="#tools">测试用例设计工具</a></li>
+                                <li><a href="#summary">总结</a></li>
+                                <li><a href="#references">参考文献</a></li>
+                            </ul>
+                        </nav>
+                    </aside>
+
+                    <!-- 右侧文章内容 -->
+                    <article class="article-main">
+                        <header class="article-header">
+                            <h1 class="article-title">测试用例设计方法：从理论到实践</h1>
+                            <div class="article-meta">
+                                <span class="article-category">测试设计</span>
+                                <span class="article-date">2024-01-25</span>
+                                <span class="article-date">阅读时间：12分钟</span>
+                            </div>
+                        </header>
+
+                        <div class="article-content">
+                            <p>测试用例设计是软件测试中的核心环节，它直接影响着测试的质量和效率。一个优秀的测试用例不仅能够发现缺陷，还能够验证软件的功能、性能和安全性。本文将深入探讨各种测试用例设计方法，从理论基础到实际应用，为测试工程师提供全面的指导。
+                            </p>
+
+                            <div class="article-image">
+                                <img src="../images/photo-1498050108023-c5249f4df085.avif?w=800&h=600&fit=crop&crop=center&auto=format&q=80"
+                                    alt="测试用例设计概念图" />
+                                <p class="image-caption">科学的测试用例设计是高质量测试的基础</p>
+                            </div>
+
+                            <h2 id="introduction">测试用例设计概述</h2>
+
+                            <p>测试用例设计是指根据软件需求规格说明、设计文档和用户使用场景，系统地设计测试用例的过程。一个好的测试用例应该具备以下特征：</p>
+
+                            <ul>
+                                <li><strong>完整性</strong>：覆盖所有测试目标和需求</li>
+                                <li><strong>可执行性</strong>：测试步骤清晰，预期结果明确</li>
+                                <li><strong>可重复性</strong>：测试结果稳定，可重复执行</li>
+                                <li><strong>可维护性</strong>：易于更新和维护</li>
+                                <li><strong>经济性</strong>：以最小的成本获得最大的测试效果</li>
+                            </ul>
+
+                            <blockquote>
+                                <p>"测试用例设计是一门艺术，也是一门科学。它需要创造力和系统性的思维相结合。"</p>
+                            </blockquote>
+
+                            <h2 id="principles">测试用例设计原则</h2>
+
+                            <h3>1. 测试用例设计的基本原则</h3>
+
+                            <div class="method-card">
+                                <h4>完整性原则</h4>
+                                <p>测试用例应该覆盖所有功能需求、非功能需求和边界条件。这包括：</p>
+                                <ul>
+                                    <li>正常流程测试</li>
+                                    <li>异常流程测试</li>
+                                    <li>边界条件测试</li>
+                                    <li>错误处理测试</li>
+                                </ul>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>经济性原则</h4>
+                                <p>在保证测试质量的前提下，尽量减少测试用例的数量，提高测试效率：</p>
+                                <ul>
+                                    <li>避免冗余测试用例</li>
+                                    <li>优先测试高风险功能</li>
+                                    <li>合理使用测试数据</li>
+                                </ul>
+                            </div>
+
+                            <div class="method-card">
+                                <h4>可维护性原则</h4>
+                                <p>测试用例应该易于理解和维护：</p>
+                                <ul>
+                                    <li>测试步骤清晰明确</li>
+                                    <li>预期结果具体可验证</li>
+                                    <li>测试数据易于准备</li>
+                                    <li>测试环境要求明确</li>
+                                </ul>
+                            </div>
+
+                            <h2 id="methods">经典测试用例设计方法</h2>
+
+                            <div class="article-image">
+                                <img src="../images/photo-1555066931-4365d14bab8c.avif?w=800&h=600&fit=crop&crop=center&auto=format&q=80"
+                                    alt="测试设计方法" />
+                                <p class="image-caption">各种测试用例设计方法的应用场景</p>
+                            </div>
+
+                            <p>测试用例设计方法可以分为两大类：黑盒测试方法和白盒测试方法。本文将重点介绍黑盒测试中的经典方法，这些方法在实际工作中应用最为广泛。</p>
+
+                            <h2 id="boundary">边界值分析法</h2>
+
+                            <h3>1. 边界值分析法的原理</h3>
+
+                            <p>边界值分析法是基于"边界附近的错误最容易发生"这一经验总结的测试方法。它主要关注输入域的边界值，包括最小值、最大值、略小于最小值、略大于最大值等。</p>
+
+                            <div class="example-box">
+                                <h4>边界值分析示例</h4>
+                                <p>假设有一个年龄输入框，有效范围是18-65岁：</p>
+                                <ul>
+                                    <li><strong>边界值</strong>：17, 18, 19, 64, 65, 66</li>
+                                    <li><strong>有效等价类</strong>：18-65之间的任意值</li>
+                                    <li><strong>无效等价类</strong>：小于18或大于65的值</li>
+                                </ul>
+                            </div>
+
+                            <h3>2. 边界值分析法的应用步骤</h3>
+
+                            <ol>
+                                <li><strong>识别输入域</strong>：确定每个输入参数的取值范围</li>
+                                <li><strong>确定边界值</strong>：找出每个输入域的边界点</li>
+                                <li><strong>设计测试用例</strong>：为每个边界值设计测试用例</li>
+                                <li><strong>执行测试</strong>：执行测试用例并验证结果</li>
+                            </ol>
+
+                            <h2 id="equivalence">等价类划分法</h2>
+
+                            <h3>1. 等价类划分法的原理</h3>
+
+                            <p>等价类划分法是将输入域划分为若干个等价类，每个等价类中的输入值在测试中具有相同的行为。这种方法可以大大减少测试用例的数量，同时保证测试的完整性。</p>
+
+                            <div class="example-box">
+                                <h4>等价类划分示例</h4>
+                                <p>对于用户登录功能：</p>
+                                <ul>
+                                    <li><strong>有效等价类</strong>：正确的用户名和密码组合</li>
+                                    <li><strong>无效等价类</strong>：
+                                        <ul>
+                                            <li>用户名正确，密码错误</li>
+                                            <li>用户名错误，密码正确</li>
+                                            <li>用户名和密码都错误</li>
+                                            <li>用户名为空</li>
+                                            <li>密码为空</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <h3>2. 等价类划分法的应用步骤</h3>
+
+                            <ol>
+                                <li><strong>分析输入域</strong>：分析每个输入参数的特征</li>
+                                <li><strong>划分等价类</strong>：将输入域划分为有效和无效等价类</li>
+                                <li><strong>设计测试用例</strong>：为每个等价类选择代表值</li>
+                                <li><strong>组合测试用例</strong>：考虑多个输入参数的组合</li>
+                            </ol>
+
+                            <h2 id="decision">决策表法</h2>
+
+                            <h3>1. 决策表法的原理</h3>
+
+                            <p>决策表法是一种用于处理复杂业务逻辑的测试方法。它将业务规则以表格的形式表示，每个规则对应一个测试用例。这种方法特别适用于条件组合复杂、规则众多的场景。</p>
+
+                            <div class="example-box">
+                                <h4>决策表示例</h4>
+                                <p>订单折扣规则：</p>
+                                <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                                    <tr style="background: rgba(0, 212, 255, 0.1);">
+                                        <th style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">条件</th>
+                                        <th style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">规则1</th>
+                                        <th style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">规则2</th>
+                                        <th style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">规则3</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">VIP用户
+                                        </td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">是</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">是</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">否</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">
+                                            订单金额≥1000</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">是</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">否</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #b0b0b0;">是</td>
+                                    </tr>
+                                    <tr style="background: rgba(0, 212, 255, 0.1);">
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">折扣率</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">20%</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">10%</td>
+                                        <td style="border: 1px solid #00d4ff; padding: 0.5rem; color: #fff;">5%</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <h2 id="state">状态转换法</h2>
+
+                            <h3>1. 状态转换法的原理</h3>
+
+                            <p>状态转换法适用于测试具有明确状态和状态转换的系统。它通过分析系统的状态、事件和转换来设计测试用例，确保所有可能的状态转换都被测试到。</p>
+
+                            <div class="example-box">
+                                <h4>状态转换示例</h4>
+                                <p>用户账户状态转换：</p>
+                                <ul>
+                                    <li><strong>状态</strong>：未激活、激活、冻结、注销</li>
+                                    <li><strong>事件</strong>：注册、激活、登录、冻结、解冻、注销</li>
+                                    <li><strong>转换</strong>：未激活→激活、激活→冻结、冻结→激活等</li>
+                                </ul>
+                            </div>
+
+                            <h2 id="scenario">场景法</h2>
+
+                            <h3>1. 场景法的原理</h3>
+
+                            <p>场景法是基于用户使用场景的测试方法。它通过模拟真实用户的使用场景来设计测试用例，确保测试用例贴近实际使用情况。</p>
+
+                            <div class="method-card">
+                                <h4>场景法应用步骤</h4>
+                                <ol>
+                                    <li><strong>识别用户角色</strong>：确定系统的主要用户类型</li>
+                                    <li><strong>分析使用场景</strong>：分析每个用户角色的典型使用场景</li>
+                                    <li><strong>设计测试场景</strong>：为每个场景设计详细的测试步骤</li>
+                                    <li><strong>验证场景完整性</strong>：确保所有重要场景都被覆盖</li>
+                                </ol>
+                            </div>
+
+                            <h2 id="practical">实践应用与最佳实践</h2>
+
+                            <div class="article-image">
+                                <img src="../images/photo-1522071820081-009f0129c71c.avif?w=800&h=600&fit=crop&crop=center&auto=format&q=80"
+                                    alt="测试实践应用" />
+                                <p class="image-caption">测试用例设计在实际项目中的应用</p>
+                            </div>
+
+                            <h3>1. 测试用例设计的实际应用</h3>
+
+                            <p>在实际项目中，测试用例设计需要考虑多个因素，包括项目时间、资源限制、风险等级等。以下是一些实际应用的建议：</p>
+
+                            <ul>
+                                <li><strong>优先级管理</strong>：根据功能的重要性和风险等级确定测试优先级</li>
+                                <li><strong>资源优化</strong>：在有限的时间和资源下，选择最有效的测试方法</li>
+                                <li><strong>持续改进</strong>：根据测试结果不断优化测试用例</li>
+                                <li><strong>团队协作</strong>：与开发、产品等团队密切协作</li>
+                            </ul>
+
+                            <h3>2. 测试用例设计的最佳实践</h3>
+
+                            <div class="method-card">
+                                <h4>测试用例设计最佳实践</h4>
+                                <ul>
+                                    <li><strong>明确测试目标</strong>：每个测试用例都应该有明确的测试目标</li>
+                                    <li><strong>保持独立性</strong>：测试用例之间应该相互独立</li>
+                                    <li><strong>数据驱动</strong>：使用数据驱动的方法提高测试效率</li>
+                                    <li><strong>可维护性</strong>：设计易于维护和更新的测试用例</li>
+                                    <li><strong>可重用性</strong>：设计可重用的测试用例组件</li>
+                                </ul>
+                            </div>
+
+                            <h2 id="tools">测试用例设计工具</h2>
+
+                            <h3>1. 常用测试用例设计工具</h3>
+
+                            <p>随着测试技术的发展，出现了许多专门用于测试用例设计的工具，这些工具可以大大提高测试用例设计的效率和质量：</p>
+
+                            <ul>
+                                <li><strong>TestLink</strong>：开源的测试用例管理工具</li>
+                                <li><strong>JIRA</strong>：项目管理和测试用例管理</li>
+                                <li><strong>TestRail</strong>：专业的测试用例管理平台</li>
+                                <li><strong>Excel</strong>：简单易用的测试用例设计工具</li>
+                                <li><strong>MindManager</strong>：思维导图工具，用于测试用例设计</li>
+                            </ul>
+
+                            <h3>2. 工具选择建议</h3>
+
+                            <p>选择合适的测试用例设计工具需要考虑以下因素：</p>
+
+                            <ul>
+                                <li><strong>项目规模</strong>：小项目可以使用简单工具，大项目需要专业工具</li>
+                                <li><strong>团队规模</strong>：团队规模影响工具的协作功能需求</li>
+                                <li><strong>预算限制</strong>：商业工具和开源工具的成本差异</li>
+                                <li><strong>技术能力</strong>：团队的技术能力影响工具的学习成本</li>
+                            </ul>
+
+                            <h2 id="summary">总结</h2>
+
+                            <p>测试用例设计是软件测试中的关键环节，它直接影响着测试的质量和效率。通过掌握各种测试用例设计方法，测试工程师可以设计出更加全面、有效的测试用例。</p>
+
+                            <p>在实际工作中，应该根据项目的具体情况选择合适的设计方法，并不断学习和实践，提高测试用例设计的水平。同时，也要关注测试技术的发展，及时掌握新的测试方法和工具。</p>
+
+                            <blockquote>
+                                <p>"优秀的测试用例设计不仅能够发现缺陷，更能够预防缺陷，是软件质量保证的重要基础。"</p>
+                            </blockquote>
+
+                            <h2 id="references">参考文献</h2>
+
+                            <div class="references">
+                                <h3>学术论文</h3>
+                                <ul>
+                                    <li>Myers, G. J., Sandler, C., & Badgett, T. (2011). "The Art of Software Testing".
+                                        John Wiley & Sons.</li>
+                                    <li>Spillner, A., Linz, T., & Schaefer, H. (2014). "Software Testing Foundations".
+                                        Rocky Nook.</li>
+                                    <li>Craig, R. D., & Jaskiel, S. P. (2002). "Systematic Software Testing". Artech
+                                        House.</li>
+                                </ul>
+
+                                <h3>技术报告</h3>
+                                <ul>
+                                    <li>ISTQB. (2023). "Test Case Design Techniques: A Comprehensive Guide".
+                                        International
+                                        Software Testing Qualifications Board.</li>
+                                    <li>IEEE. (2023). "Software Testing Standards and Best Practices". IEEE Computer
+                                        Society.</li>
+                                </ul>
+
+                                <h3>技术标准</h3>
+                                <ul>
+                                    <li>ISO/IEC/IEEE 29119-1:2022. "Software and systems engineering — Software testing
+                                        — Part 1: Concepts and definitions".</li>
+                                    <li>ISTQB. (2023). "Foundation Level Syllabus". International Software Testing
+                                        Qualifications Board.</li>
+                                </ul>
+
+                                <h3>在线资源</h3>
+                                <ul>
+                                    <li>ISTQB. (2023). "Test Case Design Techniques". <a
+                                            href="https://www.istqb.org/certifications/certified-tester-foundation-level"
+                                            target="_blank">https://www.istqb.org/certifications/certified-tester-foundation-level</a>
+                                    </li>
+                                    <li>Software Testing Help. (2023). "Test Case Design Techniques". <a
+                                            href="https://www.softwaretestinghelp.com/test-case-design-techniques/"
+                                            target="_blank">https://www.softwaretestinghelp.com/test-case-design-techniques/</a>
+                                    </li>
+                                    <li>Guru99. (2023). "Test Case Design". <a
+                                            href="https://www.guru99.com/test-case-design.html"
+                                            target="_blank">https://www.guru99.com/test-case-design.html</a></li>
+                                </ul>
+
+                                <h3>图片来源</h3>
+                                <ul>
+                                    <li>Unsplash. (2024). "Testing and Technology Images". <a
+                                            href="https://unsplash.com/s/photos/software-testing"
+                                            target="_blank">https://unsplash.com/s/photos/software-testing</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="article-navigation">
+                            <a href="ai-driven-testing-automation.html" class="nav-link">← AI驱动的测试自动化：未来已来</a>
+                            <a href="index.html" class="nav-link">文章目录 →</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <a href="index.html" class="back-to-articles">
+            <i class="fas fa-arrow-left"></i> 返回目录
+        </a>
+    </div>
+
+    <script>
+        // 导航栏交互
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }));
+
+        // 目录高亮功能
+        const tocLinks = document.querySelectorAll('.toc-nav a');
+        const sections = document.querySelectorAll('h2[id]');
+
+        function updateToc() {
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    tocLinks.forEach(link => link.classList.remove('active'));
+                    tocLinks[index].classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateToc);
+        window.addEventListener('load', updateToc);
+
+        // 平滑滚动到锚点
+        tocLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

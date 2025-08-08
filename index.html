@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>壹零壹玖 - 软件测试技术博客</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <i class="fas fa-bug"></i>
+                    <span>壹零壹玖</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">首页</a></li>
+                    <li><a href="#articles" class="nav-link">文章</a></li>
+                    <li><a href="#about" class="nav-link">关于</a></li>
+                    <li><a href="#contact" class="nav-link">联系</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主页横幅 -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">专注软件测试</span>
+                    <br>提升测试质量
+                </h1>
+                <p class="hero-subtitle">
+                    深入探讨自动化测试、性能测试、安全测试等测试技术，
+                    为您带来最新的测试方法和最佳实践
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">开始阅读</button>
+                    <button class="btn btn-secondary">订阅更新</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-elements">
+                    <div class="element element-1"></div>
+                    <div class="element element-2"></div>
+                    <div class="element element-3"></div>
+                    <div class="element element-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 文章列表 -->
+        <section id="articles" class="articles">
+            <div class="section-header">
+                <h2>最新文章</h2>
+                <p>探索最新的测试技术和最佳实践</p>
+            </div>
+            <div class="articles-grid">
+                <article class="article-card">
+                    <a href="articles/ai-driven-testing-automation.html" class="article-link">
+                        <div class="article-image">
+                            <div class="image-placeholder ai-bg"></div>
+                            <div class="article-category">AI测试</div>
+                        </div>
+                        <div class="article-content">
+                            <h3>AI驱动的测试自动化：未来已来</h3>
+                            <p>探讨AI技术在测试自动化中的应用，包括智能测试用例生成、自动化缺陷检测和预测性测试分析等前沿技术...</p>
+                            <div class="article-meta">
+                                <span class="date">2025-08-08</span>
+                                <span class="read-time">8分钟阅读</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+
+                <article class="article-card">
+                    <a href="articles/test-case-design-methods.html" class="article-link">
+                        <div class="article-image">
+                            <div class="image-placeholder testing-bg"></div>
+                            <div class="article-category">测试设计</div>
+                        </div>
+                        <div class="article-content">
+                            <h3>测试用例设计方法：从理论到实践</h3>
+                            <p>深入探讨各种测试用例设计方法，包括边界值分析、等价类划分、决策表法等经典方法，从理论基础到实际应用...</p>
+                            <div class="article-meta">
+                                <span class="date">2025-08-08</span>
+                                <span class="read-time">12分钟阅读</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+
+                
+            </div>
+        </section>
+
+        <!-- 关于部分 -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>关于我</h2>
+                        <p>我是一名专注于软件测试的测试开发，致力于为测试工程师提供最新、最实用的测试技术和方法。</p>
+                        <p>我的使命是让复杂的测试概念变得简单易懂，帮助每个测试人员提升专业技能和测试质量。</p>
+                        <div class="stats">
+                            <div class="stat">
+                                <span class="stat-number">2+</span>
+                                <span class="stat-label">文章</span>
+                            </div>
+                            <!-- <div class="stat">
+                                <span class="stat-number">50K+</span>
+                                <span class="stat-label">读者</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number">3年+</span>
+                                <span class="stat-label">经验</span>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="about-visual">
+                        <div class="tech-grid">
+                            <div class="tech-item">
+                                <i class="fas fa-cogs"></i>
+                                <span>自动化</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>性能</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>安全</span>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-code"></i>
+                                <span>API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系部分 -->
+        <section id="contact" class="contact">
+            <div class="contact-content">
+                <h2>联系我</h2>
+                <p>有任何测试相关问题或建议？我很乐意听到您的声音。</p>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:shijianliangs@gmail.com" target="_blank">shijianliangs@gmail.com</a>
+                    </div>
+                    <div class="contact-method">
+                        <i class="fab fa-github"></i>
+                        <a href="https://github.com/shijianliangs-ai/" target="_blank">github.com/shijianliangs-ai</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>壹零壹玖</h3>
+                        <p>专注软件测试，提升测试质量</p>
+                        <p>本博客所有内容均为AI创作，如有错误，欢迎指正</p>
+                    </div>
+                    <div class="footer-section">
+                        <h4>快速链接</h4>
+                        <ul>
+                            <li><a href="#home">首页</a></li>
+                            <li><a href="#articles">文章</a></li>
+                            <li><a href="#about">关于</a></li>
+                            <li><a href="#contact">联系</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>关注我</h4>
+                        <div class="social-links">
+                            <a href="https://github.com/shijianliangs-ai/"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 壹零壹玖. 保留所有权利。</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

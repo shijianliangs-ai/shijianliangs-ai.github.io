@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章目录 - 壹零壹玖</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .articles-page {
+            padding: 120px 0 80px;
+        }
+
+        .articles-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .articles-header h1 {
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .articles-header p {
+            color: #b0b0b0;
+            font-size: 1.2rem;
+        }
+
+        .articles-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #00d4ff;
+            border-color: #00d4ff;
+            color: #000;
+        }
+
+        .articles-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .article-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .article-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .article-meta {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .article-category {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.9);
+            color: #000;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .article-title {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .article-excerpt {
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .article-read-more {
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .article-read-more:hover {
+            color: #fff;
+        }
+
+        .back-to-home {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            background: rgba(0, 212, 255, 0.9);
+            color: #000;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-to-home:hover {
+            background: #00d4ff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <i class="fas fa-bug"></i>
+                    <span>壹零壹玖</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="../index.html#home" class="nav-link">首页</a></li>
+                    <li><a href="../index.html#articles" class="nav-link">文章</a></li>
+                    <li><a href="../index.html#about" class="nav-link">关于</a></li>
+                    <li><a href="../index.html#contact" class="nav-link">联系</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 文章目录页面 -->
+        <section class="articles-page">
+            <div class="container">
+                <div class="articles-header">
+                    <h1>文章目录</h1>
+                    <p>探索最新的测试技术和最佳实践</p>
+                </div>
+
+                <div class="articles-filter">
+                    <button class="filter-btn active" data-category="all">全部</button>
+                    <button class="filter-btn" data-category="自动化测试">自动化测试</button>
+                    <button class="filter-btn" data-category="性能测试">性能测试</button>
+                    <button class="filter-btn" data-category="安全测试">安全测试</button>
+                    <button class="filter-btn" data-category="API测试">API测试</button>
+                    <button class="filter-btn" data-category="AI测试">AI测试</button>
+                    <button class="filter-btn" data-category="测试设计">测试设计</button>
+                </div>
+
+                <div class="articles-list">
+                    <article class="article-item" data-category="测试设计">
+                        <div class="article-meta">
+                            <div class="article-category">测试设计</div>
+                            <div class="article-date">2025-08-08</div>
+                        </div>
+                        <div class="article-content">
+                            <h3 class="article-title">测试用例设计方法：从理论到实践</h3>
+                            <p class="article-excerpt">深入探讨各种测试用例设计方法，包括边界值分析、等价类划分、决策表法等经典方法，从理论基础到实际应用...</p>
+                            <a href="test-case-design-methods.html" class="article-read-more">阅读全文 →</a>
+                        </div>
+                    </article>
+
+                    <article class="article-item" data-category="AI测试">
+                        <div class="article-meta">
+                            <div class="article-category">AI测试</div>
+                            <div class="article-date">2025-08-08</div>
+                        </div>
+                        <div class="article-content">
+                            <h3 class="article-title">AI驱动的测试自动化：未来已来</h3>
+                            <p class="article-excerpt">探讨AI技术在测试自动化中的应用，包括智能测试用例生成、自动化缺陷检测和预测性测试分析等前沿技术...</p>
+                            <a href="ai-driven-testing-automation.html" class="article-read-more">阅读全文 →</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <a href="../index.html" class="back-to-home">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </a>
+    </div>
+
+    <script>
+        // 文章筛选功能
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const articleItems = document.querySelectorAll('.article-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const category = btn.getAttribute('data-category');
+
+                // 更新按钮状态
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // 筛选文章
+                articleItems.forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 导航栏交互
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }));
+    </script>
+</body>
+
+</html>
