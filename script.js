@@ -106,7 +106,10 @@ function enhanceFloatingElements() {
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM加载完成，开始初始化...');
+
     enhanceFloatingElements();
+    initThemeToggle();
 
     // 添加页面加载动画
     document.body.style.opacity = '0';
@@ -114,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(() => {
         document.body.style.opacity = '1';
+        console.log('页面加载动画完成');
     }, 100);
 });
 
@@ -190,47 +194,75 @@ function createScrollProgress() {
 
 createScrollProgress();
 
-// 主题切换功能（可选）
-function createThemeToggle() {
-    const themeToggle = document.createElement('button');
-    themeToggle.className = 'theme-toggle';
-    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-    themeToggle.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #00d4ff, #0099cc);
-        border: none;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-        transition: all 0.3s ease;
-        z-index: 1000;
-    `;
+// 主题切换功能
+function initThemeToggle() {
+    console.log('初始化主题切换功能...');
+
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) {
+        console.error('找不到主题切换按钮！');
+        return;
+    }
+
+    console.log('找到主题切换按钮:', themeToggle);
+
+    const icon = themeToggle.querySelector('i');
+    if (!icon) {
+        console.error('找不到图标元素！');
+        return;
+    }
+
+    // 检查本地存储的主题偏好
+    const savedTheme = localStorage.getItem('theme');
+    console.log('保存的主题:', savedTheme);
+
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        icon.className = 'fas fa-sun';
+        console.log('应用亮色主题');
+    }
 
     themeToggle.addEventListener('click', () => {
+        console.log('主题切换按钮被点击！');
+
         document.body.classList.toggle('light-theme');
-        const icon = themeToggle.querySelector('i');
-        if (document.body.classList.contains('light-theme')) {
+        const isLightTheme = document.body.classList.contains('light-theme');
+
+        console.log('当前主题:', isLightTheme ? '亮色' : '暗色');
+
+        // 更新图标
+        if (isLightTheme) {
             icon.className = 'fas fa-sun';
+            localStorage.setItem('theme', 'light');
+            console.log('切换到亮色主题');
+
+            // 添加明显的亮色主题效果
+            document.body.style.background = 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%)';
+            document.body.style.color = '#333';
         } else {
             icon.className = 'fas fa-moon';
+            localStorage.setItem('theme', 'dark');
+            console.log('切换到暗色主题');
+
+            // 恢复暗色主题效果
+            document.body.style.background = 'linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%)';
+            document.body.style.color = '#fff';
         }
     });
 
-    themeToggle.addEventListener('mouseenter', () => {
-        themeToggle.style.transform = 'scale(1.1)';
-    });
-
-    themeToggle.addEventListener('mouseleave', () => {
-        themeToggle.style.transform = 'scale(1)';
-    });
-
-    document.body.appendChild(themeToggle);
+    console.log('主题切换功能初始化完成');
 }
 
-createThemeToggle();
+
+
+// 初始化主题切换
+document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();
+});
+
+// 如果DOM已经加载完成，直接初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle);
+} else {
+    initThemeToggle();
+}
