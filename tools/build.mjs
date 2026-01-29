@@ -60,9 +60,12 @@ function buildOnce() {
     const prev = posts[idx + 1] ? toNav(posts[idx + 1]) : null;
     const next = posts[idx - 1] ? toNav(posts[idx - 1]) : null;
 
-    const htmlBody = marked.parse(p.md);
+    // remove duplicated references from markdown (we render references as a card)
+    const mdWithoutRefs = stripReferencesSection(p.md);
 
-    // optional: transform a markdown "参考链接" into references card
+    const htmlBody = marked.parse(mdWithoutRefs);
+
+    // transform a markdown "参考链接/参考文献" into references card
     const referencesHtml = buildReferencesFromMarkdown(p.md);
 
     const full = articleHtml({
@@ -166,6 +169,25 @@ function buildReferencesFromMarkdown(md) {
       <ul>${lis}</ul>
     </div>
   `;
+}
+
+function stripReferencesSection(md) {
+  const lines = md.split(/\r?\n/);
+  const idx = lines.findIndex(l => /^##\s+(参考链接|参考文献)\s*$/.test(l.trim()));
+  if (idx === -1) return md;
+
+  const out = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (i === idx) {
+      // skip until next H2 (## ...)
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('## ')) i++;
+      i--;
+      continue;
+    }
+    out.push(lines[i]);
+  }
+  return out.join('\n').trim() + '\n';
 }
 
 function escapeHtml(s) {

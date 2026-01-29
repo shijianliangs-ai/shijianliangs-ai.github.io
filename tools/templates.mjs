@@ -81,7 +81,7 @@ export function articleHtml({ fm, html, prev, next }) {
 
         <main class="article-main">
           <header class="article-header">
-            <h1 class="article-title">${escapeHtml(fm.title)}</h1>
+            <h1 class="article-title title-gradient">${escapeHtml(fm.title)}</h1>
             <div class="article-meta">
               <span class="article-category">${escapeHtml(fm.category || '文章')}</span>
               <span class="article-date">${escapeHtml(fm.date || '')}</span>
@@ -176,7 +176,8 @@ function heroBlock(fm) {
 function tocScript() {
   return `
     const tocList = document.getElementById('toc-list');
-    const headings = document.querySelectorAll('.article-content h2, .article-content h3');
+    const headings = Array.from(document.querySelectorAll('.article-content h2, .article-content h3'));
+
     headings.forEach((h, i) => {
       if (!h.id) h.id = 'section-' + i;
       const li = document.createElement('li');
@@ -186,6 +187,62 @@ function tocScript() {
       a.className = (h.tagName.toLowerCase() === 'h3') ? 'toc-h3' : '';
       li.appendChild(a);
       tocList.appendChild(li);
+    });
+
+    // 目录高亮跟随滚动（IntersectionObserver）
+    const tocLinks = Array.from(document.querySelectorAll('.toc-nav a'));
+    const map = new Map(headings.map((h, i) => [h.id, tocLinks[i]]));
+    const setActive = (id) => {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const link = map.get(id);
+      if (link) link.classList.add('active');
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      // pick the entry closest to top and intersecting
+      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]) setActive(visible[0].target.id);
+    }, { rootMargin: '-20% 0px -75% 0px', threshold: [0, 1] });
+
+    headings.filter(h => h.tagName.toLowerCase() === 'h2').forEach(h => io.observe(h));
+
+    // initial active
+    const first = headings.find(h => h.tagName.toLowerCase() === 'h2');
+    if (first) setActive(first.id);
+
+    // 代码块：行号 + 复制按钮
+    document.querySelectorAll('pre > code').forEach((code) => {
+      const pre = code.parentElement;
+      if (!pre) return;
+
+      // inject line wrappers for better visual rhythm
+      const raw = code.innerText.replace(/\n$/, '');
+      const esc = (s) => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+      const html = raw.split('\\n').map(line => '<span class="line">' + esc(line) + '</span>').join('');
+      code.innerHTML = html;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'codeblock';
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.textContent = '复制';
+      wrapper.appendChild(btn);
+
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(raw);
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1200);
+        } catch (e) {
+          btn.textContent = '失败';
+          setTimeout(() => { btn.textContent = '复制'; }, 1200);
+        }
+      });
     });
   `;
 }
@@ -249,10 +306,19 @@ function techCss() {
     .hero-testing { border-color: rgba(240,147,251,0.22); }
     .hero-claw { border-color: rgba(79,172,254,0.24); }
 
-    /* 参考链接更像卡片（沿用 .references） */
-    .references a {
-      word-break: break-all;
+    /* 标题渐变描边 */
+    .title-gradient {
+      display: inline-block;
+      background: linear-gradient(90deg, #00d4ff 0%, #7c3aed 45%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 22px rgba(0, 212, 255, 0.16);
+      -webkit-text-stroke: 1px rgba(0, 0, 0, 0.35);
     }
+
+    /* 参考链接更像卡片（沿用 .references） */
+    .references a { word-break: break-all; }
   `;
 }
 
