@@ -12,19 +12,62 @@
   <style>
   /* keep minimal here */
   
-    .clawdbot-hero-bg {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      border-radius: 12px;
+    /* 更科技的 hero */
+    .hero-bg {
       position: relative;
+      min-height: 260px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      margin: 0 auto 2.4rem;
+      border: 1px solid rgba(0, 212, 255, 0.22);
+      background: radial-gradient(1200px 400px at 20% 10%, rgba(0, 212, 255, 0.20), transparent 60%),
+                  radial-gradient(900px 380px at 80% 60%, rgba(124, 58, 237, 0.18), transparent 55%),
+                  rgba(255, 255, 255, 0.04);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
     }
-    .clawdbot-hero-bg::before {
-      content: '';
+    .hero-glow {
+      position: absolute;
+      inset: -40px;
+      background: conic-gradient(from 180deg, rgba(0,212,255,0.28), rgba(124,58,237,0.24), rgba(0,212,255,0.28));
+      filter: blur(40px);
+      opacity: 0.65;
+    }
+    .hero-inner {
+      position: relative;
+      height: 100%;
+      padding: 1.4rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 212, 255, 0.28);
+      color: #eafcff;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+    .hero-badge i { color: #00d4ff; }
+    .hero-lines {
       position: absolute;
       inset: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/></pattern></defs><rect width="120" height="120" fill="url(%23grid)"/><path d="M20 78 C40 40, 70 110, 100 60" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3"/></svg>');
+      background:
+        linear-gradient(transparent 95%, rgba(0,212,255,0.10) 96%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 18px);
+      mask-image: radial-gradient(500px 260px at 25% 30%, black 35%, transparent 70%);
       opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-ai { border-color: rgba(0,212,255,0.22); }
+    .hero-testing { border-color: rgba(240,147,251,0.22); }
+    .hero-claw { border-color: rgba(79,172,254,0.24); }
+
+    /* 参考链接更像卡片（沿用 .references） */
+    .references a {
+      word-break: break-all;
     }
   
   </style>
@@ -74,7 +117,15 @@
           </header>
 
           <article class="article-content">
-            <div class="image-placeholder clawdbot-hero-bg" style="min-height: 280px; margin: 0 auto 2.2rem;"></div>
+            
+    <div class="hero-bg hero-claw">
+      <div class="hero-glow"></div>
+      <div class="hero-inner">
+        <div class="hero-badge"><i class="fas fa-network-wired"></i><span>AI测试</span></div>
+        <div class="hero-lines"></div>
+      </div>
+    </div>
+  
             <h2>1. Clawdbot 是什么？</h2>
 <p>你可以把 Clawdbot 理解成“AI 助手的中控台（Gateway）”。Gateway 是一个常驻进程：它负责连接消息渠道（WebChat/Telegram/WhatsApp/Discord/iMessage 等），把消息转发给 AI Agent，再把 Agent 的回复发回去。</p>
 <h2>2. 前置条件</h2>
@@ -142,7 +193,6 @@ moltbot --version
 <li>moltbot GitHub：<a href="https://github.com/moltbot/moltbot">https://github.com/moltbot/moltbot</a></li>
 </ul>
 
-
             
     <h2 id="references">参考链接</h2>
     <div class="references">
@@ -153,7 +203,7 @@ moltbot --version
 
           
   <div class="article-navigation">
-    <span></span>
+    <a class="nav-link" href="ai-driven-testing-automation.html">← 上一篇：AI驱动的测试自动化：未来已来</a>
     <span></span>
   </div>
         </main>

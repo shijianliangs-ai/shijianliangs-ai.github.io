@@ -62,9 +62,7 @@ export function layoutHtml({ title, content, extraHead = "", extraCss = "", extr
 }
 
 export function articleHtml({ fm, html, prev, next }) {
-  const hero = fm.heroStyle === 'clawdbot-hero'
-    ? `<div class="image-placeholder clawdbot-hero-bg" style="min-height: 280px; margin: 0 auto 2.2rem;"></div>`
-    : '';
+  const hero = heroBlock(fm);
 
   const nav = `
   <div class="article-navigation">
@@ -95,7 +93,6 @@ export function articleHtml({ fm, html, prev, next }) {
           <article class="article-content">
             ${hero}
             ${html}
-
             ${fm.referencesHtml ? fm.referencesHtml : ''}
           </article>
 
@@ -111,13 +108,13 @@ export function articleHtml({ fm, html, prev, next }) {
   return layoutHtml({
     title: fm.title,
     content,
-    extraCss: heroCss(),
+    extraCss: techCss(),
     extraScript: tocScript()
   });
 }
 
 export function articlesIndexHtml({ items }) {
-  const cards = items.map(p => `
+  return items.map(p => `
     <article class="article-item" data-category="${escapeHtml(p.category || '文章')}">
       <div class="article-meta">
         <div class="article-category">${escapeHtml(p.category || '文章')}</div>
@@ -129,9 +126,6 @@ export function articlesIndexHtml({ items }) {
         <a href="${escapeHtml(p.href)}" class="article-read-more">阅读全文 →</a>
       </div>
     </article>`).join('\n');
-
-  // 用现有的 articles/index.html 外壳更安全：这里输出 body 内核心列表，build 脚本会把它注入。
-  return cards;
 }
 
 export function homepageCardsHtml({ items }) {
@@ -152,6 +146,31 @@ export function homepageCardsHtml({ items }) {
         </div>
       </a>
     </article>`).join('\n');
+}
+
+function heroBlock(fm) {
+  const type = fm.heroStyle || 'ai';
+  const cls = {
+    'ai': 'hero-bg hero-ai',
+    'testing': 'hero-bg hero-testing',
+    'clawdbot-hero': 'hero-bg hero-claw'
+  }[type] || 'hero-bg hero-ai';
+
+  const icon = {
+    'ai': '<i class="fas fa-robot"></i>',
+    'testing': '<i class="fas fa-vial"></i>',
+    'clawdbot-hero': '<i class="fas fa-network-wired"></i>'
+  }[type] || '<i class="fas fa-robot"></i>';
+
+  return `
+    <div class="${cls}">
+      <div class="hero-glow"></div>
+      <div class="hero-inner">
+        <div class="hero-badge">${icon}<span>${escapeHtml(fm.category || '文章')}</span></div>
+        <div class="hero-lines"></div>
+      </div>
+    </div>
+  `;
 }
 
 function tocScript() {
@@ -175,21 +194,64 @@ function baseInlineCss() {
   return `/* keep minimal here */`;
 }
 
-function heroCss() {
+function techCss() {
   return `
-    .clawdbot-hero-bg {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      border-radius: 12px;
+    /* 更科技的 hero */
+    .hero-bg {
       position: relative;
+      min-height: 260px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      margin: 0 auto 2.4rem;
+      border: 1px solid rgba(0, 212, 255, 0.22);
+      background: radial-gradient(1200px 400px at 20% 10%, rgba(0, 212, 255, 0.20), transparent 60%),
+                  radial-gradient(900px 380px at 80% 60%, rgba(124, 58, 237, 0.18), transparent 55%),
+                  rgba(255, 255, 255, 0.04);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
     }
-    .clawdbot-hero-bg::before {
-      content: '';
+    .hero-glow {
+      position: absolute;
+      inset: -40px;
+      background: conic-gradient(from 180deg, rgba(0,212,255,0.28), rgba(124,58,237,0.24), rgba(0,212,255,0.28));
+      filter: blur(40px);
+      opacity: 0.65;
+    }
+    .hero-inner {
+      position: relative;
+      height: 100%;
+      padding: 1.4rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 212, 255, 0.28);
+      color: #eafcff;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+    .hero-badge i { color: #00d4ff; }
+    .hero-lines {
       position: absolute;
       inset: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/></pattern></defs><rect width="120" height="120" fill="url(%23grid)"/><path d="M20 78 C40 40, 70 110, 100 60" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3"/></svg>');
+      background:
+        linear-gradient(transparent 95%, rgba(0,212,255,0.10) 96%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 18px);
+      mask-image: radial-gradient(500px 260px at 25% 30%, black 35%, transparent 70%);
       opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-ai { border-color: rgba(0,212,255,0.22); }
+    .hero-testing { border-color: rgba(240,147,251,0.22); }
+    .hero-claw { border-color: rgba(79,172,254,0.24); }
+
+    /* 参考链接更像卡片（沿用 .references） */
+    .references a {
+      word-break: break-all;
     }
   `;
 }
