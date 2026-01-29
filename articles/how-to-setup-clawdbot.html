@@ -20,21 +20,53 @@
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>从 0 搭建 Clawdbot（Gateway + WebChat + Telegram/WhatsApp）</h1>
-      <div class="meta">
-        <span>更新时间：2026-01-29</span>
-        <span>阅读时间：8 分钟</span>
-        <span class="tag">AI 工具</span>
-        <span class="tag">自动化</span>
+    <!-- 导航栏（与站点其它文章一致） -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-brand">
+          <i class="fas fa-bug"></i>
+          <span>壹零壹玖</span>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="../index.html#home" class="nav-link">首页</a></li>
+          <li><a href="../index.html#articles" class="nav-link">文章</a></li>
+          <li><a href="../index.html#about" class="nav-link">关于</a></li>
+          <li><a href="../index.html#contact" class="nav-link">联系</a></li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
       </div>
-      <p class="summary">
-        Clawdbot（文档里也会看到 Moltbot）是一个把 WhatsApp/Telegram/Discord/iMessage/WebChat 等消息渠道连接到 AI Agent 的 Gateway。
-        本文用“可复现”的方式，从 0 跑通：安装 → 启动 Gateway → 打开 Dashboard → 先用 WebChat 验证 → 再接入 Telegram/WhatsApp。
-      </p>
-    </header>
+    </nav>
 
-    <article>
+    <!-- 文章内容（使用 article-common.css 的布局：目录 + 主体） -->
+    <section class="article-page">
+      <div class="container">
+        <div class="article-layout">
+          <!-- 左侧目录（自动填充） -->
+          <aside class="article-toc">
+            <div class="toc-header"><h3>目录</h3></div>
+            <nav class="toc-nav"><ul id="toc-list"></ul></nav>
+          </aside>
+
+          <!-- 主体 -->
+          <main class="article-main">
+            <header class="article-header">
+              <h1 class="article-title">从 0 搭建 Clawdbot（Gateway + WebChat + Telegram/WhatsApp）</h1>
+              <div class="article-meta">
+                <span class="article-category">AI测试</span>
+                <span class="article-date">2026-01-29</span>
+                <span class="article-date">阅读时间：8 分钟</span>
+              </div>
+              <p class="article-excerpt">
+                Clawdbot（文档里也会看到 Moltbot）是一个把 WhatsApp/Telegram/Discord/iMessage/WebChat 等消息渠道连接到 AI Agent 的 Gateway。
+                本文用“可复现”的方式，从 0 跑通：安装 → 启动 Gateway → 打开 Dashboard → 先用 WebChat 验证 → 再接入 Telegram/WhatsApp。
+              </p>
+            </header>
+
+            <article class="article-content">
       <h2>1. Clawdbot 是什么？</h2>
       <p>
         你可以把 Clawdbot 理解成“AI 助手的中控台（Gateway）”。Gateway 是一个常驻进程：
@@ -161,11 +193,49 @@ moltbot --version</code></pre>
         <li><a href="https://docs.clawd.bot" target="_blank" rel="noreferrer">Clawdbot / Moltbot 文档</a></li>
         <li><a href="https://github.com/moltbot/moltbot" target="_blank" rel="noreferrer">moltbot GitHub</a></li>
       </ul>
-    </article>
+            </article>
 
-    <footer>
-      <p>如果你希望我把 Telegram/WhatsApp 的配置按你的实际账号与安全策略（白名单、群聊提及、远程访问）写成“可复制配置”，把你的目标渠道告诉我即可。</p>
-    </footer>
+            <!-- 页脚导航（上一篇/下一篇） -->
+            <div class="article-navigation">
+              <a class="nav-link" href="ai-driven-testing-automation.html">← 上一篇：AI驱动的测试自动化：未来已来</a>
+              <a class="nav-link" href="test-case-design-methods.html">下一篇：测试用例设计方法：从理论到实践 →</a>
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+
+    <a href="index.html" class="back-to-articles"><i class="fas fa-arrow-left"></i> 返回目录</a>
   </div>
+
+  <script>
+    // 移动端菜单
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    if (hamburger && navMenu) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+      });
+      document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      }));
+    }
+
+    // 自动生成目录（抓取 h2/h3）
+    const tocList = document.getElementById('toc-list');
+    const headings = document.querySelectorAll('.article-content h2, .article-content h3');
+    headings.forEach((h, i) => {
+      if (!h.id) h.id = `section-${i}`;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `#${h.id}`;
+      a.textContent = h.textContent;
+      a.className = (h.tagName.toLowerCase() === 'h3') ? 'toc-h3' : '';
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+  </script>
 </body>
 </html>
