@@ -1,0 +1,73 @@
+<div id="local-search" class="widget-wrap">
+  <h3 class="widget-title">搜索</h3>
+  <div class="widget">
+    <input id="local-search-input" type="search" placeholder="搜索文章..." autocomplete="off" style="width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:8px;" />
+    <div id="local-search-result" style="margin-top:10px;font-size:0.95em;"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var input = document.getElementById('local-search-input');
+  var result = document.getElementById('local-search-result');
+  if (!input || !result) return;
+
+  var data = null;
+  var loading = false;
+
+  function escapeHtml(s){
+    return (s || '').replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);
+    });
+  }
+
+  function loadIndex(cb){
+    if (data) return cb();
+    if (loading) return;
+    loading = true;
+    fetch('<%- url_for("search.xml") %>', {cache: 'no-store'})
+      .then(function(r){ return r.text(); })
+      .then(function(xmlText){
+        var parser = new DOMParser();
+        var xml = parser.parseFromString(xmlText, 'text/xml');
+        var entries = [].slice.call(xml.getElementsByTagName('entry'));
+        data = entries.map(function(e){
+          var title = e.getElementsByTagName('title')[0]?.textContent || '';
+          var content = e.getElementsByTagName('content')[0]?.textContent || '';
+          var url = e.getElementsByTagName('url')[0]?.textContent || '';
+          return { title: title, content: content, url: url };
+        });
+      })
+      .catch(function(){
+        data = [];
+      })
+      .finally(function(){
+        loading = false;
+        cb();
+      });
+  }
+
+  function render(list, q){
+    if (!q) { result.innerHTML = ''; return; }
+    if (!list.length) { result.innerHTML = '<p>没有找到结果</p>'; return; }
+    var html = '<ul style="list-style:none;padding-left:0;">' + list.slice(0, 10).map(function(it){
+      return '<li style="margin:0 0 10px;">'
+        + '<a href="' + it.url + '"><strong>' + escapeHtml(it.title || it.url) + '</strong></a>'
+        + '</li>';
+    }).join('') + '</ul>';
+    result.innerHTML = html;
+  }
+
+  input.addEventListener('input', function(){
+    var q = (input.value || '').trim().toLowerCase();
+    loadIndex(function(){
+      var list = data.filter(function(it){
+        return (it.title || '').toLowerCase().includes(q) || (it.content || '').toLowerCase().includes(q);
+      }).map(function(it){
+        return {title: it.title, url: it.url.startsWith('/') ? it.url : it.url, content: it.content};
+      });
+      render(list, q);
+    });
+  });
+})();
+</script>
