@@ -11,6 +11,7 @@
     gap: 3rem;
     max-width: 1200px;
     margin: 0 auto;
+    align-items: start;
 }
 
 /* 目录样式 */
@@ -22,6 +23,7 @@
     border-radius: 12px;
     padding: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 2;
 }
 
 .toc-header h3 {
