@@ -1,9 +1,13 @@
+# node
 node_modules/
-.DS_Store
-
-# build tooling (keep source md)
 *.log
 
-# optional editor
+# Hexo
+hexo/public/
+hexo/.deploy_git/
+hexo/db.json
+
+# OS/editor
+.DS_Store
 .vscode/
 .idea/
