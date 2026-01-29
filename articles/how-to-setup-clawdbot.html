@@ -8,8 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="article-common.css" />
+  
   <style>
-    /* 本文配图占位（跟其它文章的渐变卡片风格一致） */
+  /* keep minimal here */
+  
     .clawdbot-hero-bg {
       background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
       border-radius: 12px;
@@ -24,26 +26,7 @@
       background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/></pattern></defs><rect width="120" height="120" fill="url(%23grid)"/><path d="M20 78 C40 40, 70 110, 100 60" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3"/></svg>');
       opacity: 0.9;
     }
-
-    .clawdbot-step-bg {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-    }
-    .clawdbot-step-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="1.2" fill="rgba(255,255,255,0.22)"/></pattern></defs><rect width="120" height="120" fill="url(%23dots)"/></svg>');
-      opacity: 0.9;
-    }
-
-    /* 参考链接区域：跟其它文章一致，用 references 容器 */
-    .references a {
-      word-break: break-all;
-    }
+  
   </style>
   <script>
     var _hmt = _hmt || [];
@@ -57,210 +40,132 @@
 </head>
 <body>
   <div class="container">
-    <!-- 导航栏（与站点其它文章一致） -->
     <nav class="navbar">
       <div class="container">
-        <div class="nav-brand">
-          <i class="fas fa-bug"></i>
-          <span>壹零壹玖</span>
-        </div>
+        <div class="nav-brand"><i class="fas fa-bug"></i><span>壹零壹玖</span></div>
         <ul class="nav-menu">
           <li><a href="../index.html#home" class="nav-link">首页</a></li>
           <li><a href="../index.html#articles" class="nav-link">文章</a></li>
           <li><a href="../index.html#about" class="nav-link">关于</a></li>
           <li><a href="../index.html#contact" class="nav-link">联系</a></li>
         </ul>
-        <div class="hamburger">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
+        <div class="hamburger"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
       </div>
     </nav>
 
-    <!-- 文章内容（使用 article-common.css 的布局：目录 + 主体） -->
-    <section class="article-page">
-      <div class="container">
-        <div class="article-layout">
-          <!-- 左侧目录（自动填充） -->
-          <aside class="article-toc">
-            <div class="toc-header"><h3>目录</h3></div>
-            <nav class="toc-nav"><ul id="toc-list"></ul></nav>
-          </aside>
+    
+  <section class="article-page">
+    <div class="container">
+      <div class="article-layout">
+        <aside class="article-toc">
+          <div class="toc-header"><h3>目录</h3></div>
+          <nav class="toc-nav"><ul id="toc-list"></ul></nav>
+        </aside>
 
-          <!-- 主体 -->
-          <main class="article-main">
-            <header class="article-header">
-              <h1 class="article-title">从 0 搭建 Clawdbot（Gateway + WebChat + Telegram/WhatsApp）</h1>
-              <div class="article-meta">
-                <span class="article-category">AI测试</span>
-                <span class="article-date">2026-01-29</span>
-                <span class="article-date">阅读时间：8 分钟</span>
-              </div>
-              <p class="article-excerpt">
-                Clawdbot（文档里也会看到 Moltbot）是一个把 WhatsApp/Telegram/Discord/iMessage/WebChat 等消息渠道连接到 AI Agent 的 Gateway。
-                本文用“可复现”的方式，从 0 跑通：安装 → 启动 Gateway → 打开 Dashboard → 先用 WebChat 验证 → 再接入 Telegram/WhatsApp。
-              </p>
-            </header>
+        <main class="article-main">
+          <header class="article-header">
+            <h1 class="article-title">从 0 搭建 Clawdbot（Gateway + WebChat + Telegram/WhatsApp）</h1>
+            <div class="article-meta">
+              <span class="article-category">AI测试</span>
+              <span class="article-date">2026-01-29</span>
+              <span class="article-date">8分钟阅读</span>
+            </div>
+            <p class="article-excerpt">手把手搭建 Clawdbot / Moltbot：安装、启动 Gateway、打开 Dashboard、用 WebChat 验证、接入 Telegram/WhatsApp，并附常见问题排查与安全建议。</p>
+          </header>
 
-            <article class="article-content">
-
-              <div class="image-placeholder clawdbot-hero-bg" style="min-height: 280px; margin: 0 auto 2.2rem;"></div>
-
-      <h2>1. Clawdbot 是什么？</h2>
-      <p>
-        你可以把 Clawdbot 理解成“AI 助手的中控台（Gateway）”。Gateway 是一个常驻进程：
-        它负责连接消息渠道（WebChat/Telegram/WhatsApp/Discord/iMessage 等），把消息转发给 AI Agent，
-        再把 Agent 的回复发回去。
-      </p>
-
-      <h2>2. 前置条件</h2>
-      <ul>
-        <li><strong>Node.js 22+</strong></li>
-        <li>一台电脑或服务器（macOS / Linux / Windows 推荐用 WSL2）</li>
-        <li>（可选）Telegram 机器人 Token，或 WhatsApp 手机用于扫码</li>
-      </ul>
-
-      <h2>3. 安装（推荐：npm 全局安装）</h2>
-      <pre><code>npm install -g moltbot@latest
+          <article class="article-content">
+            <div class="image-placeholder clawdbot-hero-bg" style="min-height: 280px; margin: 0 auto 2.2rem;"></div>
+            <h2>1. Clawdbot 是什么？</h2>
+<p>你可以把 Clawdbot 理解成“AI 助手的中控台（Gateway）”。Gateway 是一个常驻进程：它负责连接消息渠道（WebChat/Telegram/WhatsApp/Discord/iMessage 等），把消息转发给 AI Agent，再把 Agent 的回复发回去。</p>
+<h2>2. 前置条件</h2>
+<ul>
+<li><strong>Node.js 22+</strong></li>
+<li>一台电脑或服务器（macOS / Linux / Windows 推荐用 WSL2）</li>
+<li>（可选）Telegram 机器人 Token，或 WhatsApp 手机用于扫码</li>
+</ul>
+<h2>3. 安装（推荐：npm 全局安装）</h2>
+<pre><code class="language-bash">npm install -g moltbot@latest
 # 或
 pnpm add -g moltbot@latest
 
-moltbot --version</code></pre>
-      <p>
-        说明：近期官方文档中项目名多以 <strong>Moltbot</strong> 命令体现，但它就是 Clawdbot 生态的一部分。
-        本文沿用文档现状，以 <code>moltbot</code> 命令为准。
-      </p>
-
-      <h2>4. 初始化（onboard）并安装后台服务</h2>
-      <pre><code>moltbot onboard --install-daemon</code></pre>
-      <p>
-        这一步通常会：生成配置文件、生成 token、并把 Gateway 安装为用户级服务（systemd user / launchd）。
-        你也可以稍后手动启动 Gateway（见下一节）。
-      </p>
-
-      <h2>5. 启动 Gateway & 打开 Dashboard</h2>
-      <p>默认 Dashboard 地址（本机）：</p>
-      <ul>
-        <li><code>http://127.0.0.1:18789/</code></li>
-        <li><code>http://localhost:18789/</code></li>
-      </ul>
-
-      <p>如果你没有安装 daemon，或者需要调试，可手动启动：</p>
-      <pre><code>moltbot gateway --port 18789</code></pre>
-
-      <h3>安全提醒（重要）</h3>
-      <p>
-        新手强烈建议先只绑定 loopback（127.0.0.1）本地跑通。
-        如果你要在服务器上开放控制台，请优先使用 <strong>SSH Tunnel</strong> 或 <strong>Tailscale/VPN</strong>，
-        不要直接把端口裸露到公网。
-      </p>
-
-      <h2>6. 先用 WebChat 验证“能对话”</h2>
-      <ol>
-        <li>打开 Dashboard</li>
-        <li>进入会话（Session）</li>
-        <li>发一句 “hello” 或 “测试一下”</li>
-        <li>确认 Agent 有回复</li>
-      </ol>
-      <p>如果没有回复，优先看 Gateway 控制台日志是否有模型配置/Agent 连接报错。</p>
-
-      <h2>7. 接入 Telegram（推荐当作第一条真实渠道）</h2>
-
-      <div class="image-placeholder clawdbot-step-bg" style="min-height: 220px; margin: 0 auto 1.8rem;"></div>
-      <h3>7.1 创建 Bot</h3>
-      <ol>
-        <li>Telegram 搜索 <strong>@BotFather</strong></li>
-        <li>发送 <code>/newbot</code>，按提示创建机器人</li>
-        <li>拿到形如 <code>123456:ABC-DEF...</code> 的 <strong>Bot Token</strong></li>
-      </ol>
-
-      <h3>7.2 写入配置并重启</h3>
-      <p>
-        配置文件默认在：<code>~/.clawdbot/moltbot.json</code>。
-        不同版本字段可能略有差异，下面是常见结构示例：
-      </p>
-      <pre><code>{
-  "channels": {
-    "telegram": {
-      "token": "YOUR_BOT_TOKEN"
+moltbot --version
+</code></pre>
+<p>说明：近期官方文档中项目名多以 <strong>Moltbot</strong> 命令体现，但它就是 Clawdbot 生态的一部分。本文沿用文档现状，以 <code>moltbot</code> 命令为准。</p>
+<h2>4. 初始化（onboard）并安装后台服务</h2>
+<pre><code class="language-bash">moltbot onboard --install-daemon
+</code></pre>
+<h2>5. 启动 Gateway &amp; 打开 Dashboard</h2>
+<p>默认 Dashboard 地址（本机）：</p>
+<ul>
+<li><code>http://127.0.0.1:18789/</code></li>
+<li><code>http://localhost:18789/</code></li>
+</ul>
+<p>手动启动（用于调试/未装 daemon）：</p>
+<pre><code class="language-bash">moltbot gateway --port 18789
+</code></pre>
+<h2>6. 先用 WebChat 验证“能对话”</h2>
+<p>打开 Dashboard → 进入会话（Session）→ 发一句“hello”验证链路。</p>
+<h2>7. 接入 Telegram（推荐当作第一条真实渠道）</h2>
+<h3>7.1 创建 Bot</h3>
+<ol>
+<li>Telegram 搜索 <strong>@BotFather</strong></li>
+<li>发送 <code>/newbot</code> 创建机器人</li>
+<li>拿到 Bot Token</li>
+</ol>
+<h3>7.2 写入配置并重启</h3>
+<p>配置文件默认在：<code>~/.clawdbot/moltbot.json</code>。示例：</p>
+<pre><code class="language-json">{
+  &quot;channels&quot;: {
+    &quot;telegram&quot;: {
+      &quot;token&quot;: &quot;YOUR_BOT_TOKEN&quot;
     }
   }
-}</code></pre>
-      <p>保存后重启 Gateway，再给你的 bot 发消息测试。</p>
+}
+</code></pre>
+<h3>7.3 建议加白名单/提及触发</h3>
+<ul>
+<li>allowFrom：只允许你的账号</li>
+<li>requireMention：群里只有 @ 机器人时才触发</li>
+</ul>
+<h2>8. 接入 WhatsApp（可选：需要扫码登录）</h2>
+<pre><code class="language-bash">moltbot channels login
+</code></pre>
+<h2>9. 常见问题排查</h2>
+<ul>
+<li>Dashboard 打不开：检查 gateway 是否运行、端口是否占用</li>
+<li>不回消息：先用 WebChat 验证、查看 gateway 日志</li>
+<li>群聊太吵：启用仅提及触发、allowlist</li>
+</ul>
+<h2>参考链接</h2>
+<ul>
+<li>Clawdbot / Moltbot 文档：<a href="https://docs.clawd.bot">https://docs.clawd.bot</a></li>
+<li>moltbot GitHub：<a href="https://github.com/moltbot/moltbot">https://github.com/moltbot/moltbot</a></li>
+</ul>
 
-      <h3>7.3 建议加白名单/提及触发（避免群里刷屏）</h3>
-      <ul>
-        <li><strong>allowFrom</strong>：只允许你的账号触发</li>
-        <li><strong>requireMention</strong>：群聊里只有 @ 机器人时才触发</li>
-      </ul>
 
-      <h2>8. 接入 WhatsApp（可选：需要扫码登录）</h2>
-      <p>WhatsApp 通常需要登录 WhatsApp Web，会提示扫码：</p>
-      <pre><code>moltbot channels login</code></pre>
-      <ul>
-        <li>建议一个 WhatsApp 会话只给一个 Gateway 使用（多开容易互踢）</li>
-        <li>服务器部署要做好 state 持久化，否则重启后可能需要重复扫码</li>
-      </ul>
+            
+    <h2 id="references">参考链接</h2>
+    <div class="references">
+      <ul><li>Clawdbot / Moltbot 文档： <a href="https://docs.clawd.bot" target="_blank" rel="noreferrer">https://docs.clawd.bot</a></li><li>moltbot GitHub： <a href="https://github.com/moltbot/moltbot" target="_blank" rel="noreferrer">https://github.com/moltbot/moltbot</a></li></ul>
+    </div>
+  
+          </article>
 
-      <h2>9. 常见问题排查</h2>
-      <h3>9.1 Dashboard 打不开</h3>
-      <ul>
-        <li>确认 Gateway 是否在运行</li>
-        <li>确认端口是否被占用（默认 18789）</li>
-        <li>服务器上是否有防火墙/安全组拦截</li>
-      </ul>
-
-      <h3>9.2 能打开但不回消息</h3>
-      <ul>
-        <li>先用 WebChat / Dashboard 会话验证基础链路</li>
-        <li>查看 gateway 日志：Agent/RPC/模型配置是否报错</li>
-      </ul>
-
-      <h3>9.3 群聊太吵</h3>
-      <ul>
-        <li>开启“仅提及触发”</li>
-        <li>配置 allowlist（只允许自己/指定联系人）</li>
-      </ul>
-
-      <h2>10. 下一步：加 Skills 让它能“做事”</h2>
-      <p>
-        跑通基础对话后，建议开始接入 Skills（天气、日程、Webhook、自动化等），
-        让助手从“聊天”升级到“执行任务”。
-      </p>
-
-      <h2 id="references">参考链接</h2>
-      <div class="references">
-        <h3>官方文档</h3>
-        <ul>
-          <li>Clawdbot / Moltbot 文档：
-            <a href="https://docs.clawd.bot" target="_blank" rel="noreferrer">https://docs.clawd.bot</a>
-          </li>
-        </ul>
-        <h3>项目仓库</h3>
-        <ul>
-          <li>moltbot GitHub：
-            <a href="https://github.com/moltbot/moltbot" target="_blank" rel="noreferrer">https://github.com/moltbot/moltbot</a>
-          </li>
-        </ul>
+          
+  <div class="article-navigation">
+    <span></span>
+    <span></span>
+  </div>
+        </main>
       </div>
-            </article>
+    </div>
+  </section>
 
-            <!-- 页脚导航（上一篇/下一篇） -->
-            <div class="article-navigation">
-              <a class="nav-link" href="ai-driven-testing-automation.html">← 上一篇：AI驱动的测试自动化：未来已来</a>
-              <a class="nav-link" href="test-case-design-methods.html">下一篇：测试用例设计方法：从理论到实践 →</a>
-            </div>
-          </main>
-        </div>
-      </div>
-    </section>
-
-    <a href="index.html" class="back-to-articles"><i class="fas fa-arrow-left"></i> 返回目录</a>
+  <a href="index.html" class="back-to-articles"><i class="fas fa-arrow-left"></i> 返回目录</a>
+  
   </div>
 
   <script>
-    // 移动端菜单
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     if (hamburger && navMenu) {
@@ -273,20 +178,20 @@ moltbot --version</code></pre>
         navMenu.classList.remove('active');
       }));
     }
-
-    // 自动生成目录（抓取 h2/h3）
+    
     const tocList = document.getElementById('toc-list');
     const headings = document.querySelectorAll('.article-content h2, .article-content h3');
     headings.forEach((h, i) => {
-      if (!h.id) h.id = `section-${i}`;
+      if (!h.id) h.id = 'section-' + i;
       const li = document.createElement('li');
       const a = document.createElement('a');
-      a.href = `#${h.id}`;
+      a.href = '#' + h.id;
       a.textContent = h.textContent;
       a.className = (h.tagName.toLowerCase() === 'h3') ? 'toc-h3' : '';
       li.appendChild(a);
       tocList.appendChild(li);
     });
+  
   </script>
 </body>
 </html>

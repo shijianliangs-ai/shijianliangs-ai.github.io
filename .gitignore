@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+
+# build tooling (keep source md)
+*.log
+
+# optional editor
+.vscode/
+.idea/
