@@ -37,3 +37,4 @@ Output is in `public/`.
 
 ## Server (nginx static)
 Point nginx to the generated `public/` directory (or sync `public/` to your web root) and reload nginx after updates.
+# redeploy 2026-02-04T15:17:20+09:00
